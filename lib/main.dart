@@ -1,3 +1,4 @@
+import 'package:expense_tracker/screens/onbording_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -5,7 +6,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: "Inter", // Set the default font family to Inter
       ),
-      home: Scaffold(body: Center(child: const Text('Hello, Flutter!'))),
+      home: OnbordingScreen(),
     );
   }
 }

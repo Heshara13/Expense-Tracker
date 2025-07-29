@@ -1,3 +1,6 @@
+import 'package:expense_tracker/constants/colors.dart';
+import 'package:expense_tracker/constants/constants.dart';
+import 'package:expense_tracker/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
 class UserDataScreen extends StatefulWidget {
@@ -8,10 +11,169 @@ class UserDataScreen extends StatefulWidget {
 }
 
 class _UserDataScreenState extends State<UserDataScreen> {
+  bool _rememberMe = false;
+
+  //form key for the validations
+  final _formKey = GlobalKey<FormState>();
+
+  //controllers
+  final TextEditingController _userNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _userNameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('User Data'), centerTitle: true),
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(kDefalutPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Enter your \nPersonal Details",
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(height: 30),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormField(
+                        controller: _userNameController,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Please Enter Your Name";
+                          }
+                        },
+                        decoration: InputDecoration(
+                          hintText: "Name",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 20,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      TextFormField(
+                        controller: _emailController,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Please Enter Your Email";
+                          }
+                        },
+                        decoration: InputDecoration(
+                          hintText: "Email",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 20,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      TextFormField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          hintText: "Password",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 20,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      TextFormField(
+                        controller: _confirmPasswordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          hintText: "Confirm Password",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 20,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+
+                      Row(
+                        children: [
+                          const Text(
+                            "Remember Me for the next time",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: kGrey,
+                            ),
+                          ),
+                          Expanded(
+                            child: CheckboxListTile(
+                              activeColor: kMainColor,
+                              value: _rememberMe,
+                              onChanged: (value) {
+                                setState(() {
+                                  _rememberMe = value!;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 15),
+                      GestureDetector(
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            // form is valid process data
+                            String userName = _userNameController.text;
+                            String email = _emailController.text;
+                            String password = _passwordController.text;
+                            String confirmPassword =
+                                _confirmPasswordController.text;
+
+                            print(
+                              "$userName, $email, $password, $confirmPassword",
+                            );
+                          }
+                        },
+                        child: const CustomButton(
+                          buttonName: "Next",
+                          buttonColor: kMainColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
