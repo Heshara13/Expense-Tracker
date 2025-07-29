@@ -1,5 +1,7 @@
 import 'package:expense_tracker/constants/colors.dart';
 import 'package:expense_tracker/constants/constants.dart';
+import 'package:expense_tracker/screens/main_screen.dart';
+import 'package:expense_tracker/services/user_service.dart';
 import 'package:expense_tracker/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
@@ -59,6 +61,7 @@ class _UserDataScreenState extends State<UserDataScreen> {
                           if (value!.isEmpty) {
                             return "Please Enter Your Name";
                           }
+                          return null;
                         },
                         decoration: InputDecoration(
                           hintText: "Name",
@@ -78,6 +81,7 @@ class _UserDataScreenState extends State<UserDataScreen> {
                           if (value!.isEmpty) {
                             return "Please Enter Your Email";
                           }
+                          return null;
                         },
                         decoration: InputDecoration(
                           hintText: "Email",
@@ -147,7 +151,7 @@ class _UserDataScreenState extends State<UserDataScreen> {
                       ),
                       const SizedBox(height: 15),
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           if (_formKey.currentState!.validate()) {
                             // form is valid process data
                             String userName = _userNameController.text;
@@ -156,9 +160,26 @@ class _UserDataScreenState extends State<UserDataScreen> {
                             String confirmPassword =
                                 _confirmPasswordController.text;
 
-                            print(
-                              "$userName, $email, $password, $confirmPassword",
+                            // save username and email to shared preferences or any storage
+                            await UserService.storeUserDetails(
+                              userName: userName,
+                              email: email,
+                              password: password,
+                              confirmPassword: confirmPassword,
+                              context: context,
                             );
+
+                            // Navigate to the Main screen or perform any action
+                            if (context.mounted) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const MainScreen();
+                                  },
+                                ),
+                              );
+                            }
                           }
                         },
                         child: const CustomButton(
